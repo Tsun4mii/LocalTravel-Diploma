@@ -1,0 +1,57 @@
+.welcome_div {
+  background-image: url(http://localhost:3000/mountains.jpeg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 450px;
+}
+
+.inner_div {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 4% 4% 65px;
+  position: relative;
+  max-width: 900px;
+  margin: 0;
+}
+.inner_div h1 {
+  text-shadow: rgb(0 0 0 / 20%) 0px 9px 12px, rgb(0 0 0 / 12%) 0px 3px 16px,
+    rgb(0 0 0 / 14%) 0px 5px 6px;
+  color: rgb(255, 255, 255);
+  font-family: ProximaNova-Bold, Helvetica, Arial, sans-serif;
+  font-style: normal;
+  font-size: 80px;
+  margin: 0px;
+  line-height: 64px;
+}
+.inner_div h2 {
+  font-weight: 400;
+  font-size: 1.125rem;
+  line-height: 1.55556;
+  letter-spacing: normal;
+  font-family: ProximaNova-Bold, Helvetica, Arial, sans-serif;
+  color: white;
+  display: block;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+
+.input_div {
+  width: 80%;
+  color: black;
+  z-index: 99;
+  padding-top: 2%;
+}
+
+.search {
+  color: black;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  justify-content: flex-start;
+}

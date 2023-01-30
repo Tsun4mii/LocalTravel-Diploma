@@ -1,0 +1,40 @@
+.h3_text {
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.33333;
+  letter-spacing: normal;
+  font-family: "Proxima Nova Rg", Helvetica, Arial, sans-serif;
+  color: rgb(18, 20, 22);
+  margin: 0;
+}
+
+.header_div {
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
+.trips_container {
+  margin: 0px auto 60px;
+  display: block;
+  width: 1230px;
+}
+
+.trips_container h4 {
+  font-weight: 400;
+  font-size: 1.125rem;
+  line-height: 1.55556;
+  letter-spacing: normal;
+  color: rgb(18, 20, 22);
+}
+
+.cards_container {
+  position: relative;
+  display: block;
+}
+
+.cards_gallery {
+  display: flex;
+}
