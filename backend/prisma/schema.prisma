@@ -20,4 +20,7 @@ model User{
   email String
   password String
   role ROLE @default(USER)
+  hashedRt String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
