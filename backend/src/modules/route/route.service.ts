@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRouteDTO } from './dto/route.create.dto';
 import { FindRouteDTO } from './dto/route.find.dto';
+import { UpdateRouteDTO } from './dto/route.update.dto';
 import { RouteMapper } from './mapper/route.mapper';
 import { RouteRepository } from './route.repository';
 import { Route } from './types';
@@ -19,9 +20,27 @@ export class RouteService {
     );
     return await this.routeRepository.create(mappedRoute);
   }
-
+  //FIXME: ??? Better variant of isolation ???
   async findAll(params: FindRouteDTO) {
     const mappedParams = this.routeMapper.fromRouteFindToRouteFindArgs(params);
-    return await this.routeRepository.findAll(mappedParams);
+    const findResult = await this.routeRepository.findAll(mappedParams);
+    if (findResult[0].hasOwnProperty('user')) {
+      return this.routeMapper.isolateUserData(findResult);
+    }
+    return findResult;
+  }
+
+  async update(routeId: string, data: UpdateRouteDTO): Promise<Route> {
+    const mappedUpdateRoute =
+      this.routeMapper.fromRouteUpdateToRouteUpdateInput(data);
+    return this.routeRepository.update(routeId, mappedUpdateRoute);
+  }
+
+  async delete(routeId: string): Promise<Route> {
+    return await this.routeRepository.delete(routeId);
+  }
+  //TODO: Add include for user and points fields
+  async findById(routeId: string): Promise<Route> {
+    return await this.routeRepository.findById(routeId);
   }
 }

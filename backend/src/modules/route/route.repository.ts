@@ -10,8 +10,22 @@ export class RouteRepository {
   async create(route: Prisma.RouteCreateInput): Promise<Route> {
     return await this.prisma.route.create({ data: route });
   }
-  //FIXME: Fix security issue (leaked user password and refresh token hashes)
   async findAll(params: Prisma.RouteFindManyArgs): Promise<Route[]> {
     return await this.prisma.route.findMany(params);
+  }
+
+  async update(routeId: string, data: Prisma.RouteUpdateInput): Promise<Route> {
+    return await this.prisma.route.update({
+      where: { id: routeId },
+      data: data,
+    });
+  }
+
+  async delete(routeId: string): Promise<Route> {
+    return await this.prisma.route.delete({ where: { id: routeId } });
+  }
+
+  async findById(routeId: string): Promise<Route> {
+    return await this.prisma.route.findUnique({ where: { id: routeId } });
   }
 }

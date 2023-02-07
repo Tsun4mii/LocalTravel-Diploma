@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { CreateRouteDTO } from '../dto/route.create.dto';
 import { FindRouteDTO } from '../dto/route.find.dto';
+import { UpdateRouteDTO } from '../dto/route.update.dto';
+import { Route } from '../types';
 
 @Injectable()
 export class RouteMapper {
@@ -28,6 +30,33 @@ export class RouteMapper {
       include: params.include,
       where: params.where,
     };
+  }
+
+  public fromRouteUpdateToRouteUpdateInput(
+    route: UpdateRouteDTO,
+  ): Prisma.RouteUpdateInput {
+    return {
+      name: route.name,
+      description: route.description,
+    };
+  }
+
+  public isolateUserData(findResult: Route[]) {
+    return this.mapUserDataInFindResult(findResult);
+  }
+
+  private mapUserDataInFindResult(findResult: Route[]) {
+    return findResult.map(
+      (item) =>
+        (item = {
+          ...item,
+          user: {
+            id: item.user.id,
+            email: item.user.email,
+            role: item.user.role,
+          },
+        }),
+    );
   }
 
   private mapPointsToConnectArray(pointsArray: Array<string>) {
