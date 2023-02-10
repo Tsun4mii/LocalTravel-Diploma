@@ -1,0 +1,11 @@
+.background_image {
+  background-image: url("http://localhost:3001/background.jpg");
+  background-size: cover;
+}
+
+.card_body {
+  max-width: 600px;
+}
+
+.logoText {
+}

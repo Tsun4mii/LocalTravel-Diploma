@@ -52,7 +52,7 @@ const TripList = () => {
               <Card.Body css={{ maxWidth: "300px", alignContent: "center" }}>
                 <div style={{ width: "fit-content" }}>
                   <Image
-                    src={"http://localhost:3000/turkey.jpg"}
+                    src={"http://localhost:3001/turkey.jpg"}
                     width={283}
                     height={347}
                     style={{ objectFit: "cover" }}
