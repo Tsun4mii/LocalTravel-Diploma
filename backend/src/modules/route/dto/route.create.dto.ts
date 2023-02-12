@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateRouteDTO {
   @IsString()
@@ -10,4 +10,7 @@ export class CreateRouteDTO {
   @IsArray()
   @IsNotEmpty()
   points: string[];
+  @IsArray()
+  @IsOptional()
+  images?: string[];
 }

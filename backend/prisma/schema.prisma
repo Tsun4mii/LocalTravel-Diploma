@@ -48,4 +48,14 @@ model Route{
   user User @relation(fields: [userId], references: [id])
   userId String 
   points Point[]
+  images Image[]
+}
+
+model Image{
+  id String @id @default(uuid())
+  uriPath String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  route Route[]
 }

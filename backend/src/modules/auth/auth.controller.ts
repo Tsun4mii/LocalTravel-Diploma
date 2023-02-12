@@ -19,20 +19,20 @@ export class AuthController {
   @Post('/local/signup')
   @HttpCode(HttpStatus.CREATED)
   async handleUserRegister(@Body() user: AuthDto): Promise<Tokens> {
-    return await this.authService.registerUser(user);
+    return await this.authService.register(user);
   }
 
   @Post('/local/signin')
   @HttpCode(HttpStatus.OK)
   async handleUserSignin(@Body() user: AuthDto): Promise<Tokens> {
-    return await this.authService.signinUser(user);
+    return await this.authService.signin(user);
   }
 
   @UseGuards(AccessTokenGuard)
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
   async handleUserLogout(@GetCurrentUserId() userId: string) {
-    return await this.authService.logoutUser(userId);
+    return await this.authService.logout(userId);
   }
 
   @UseGuards(RefreshTokenGuard)
@@ -42,6 +42,6 @@ export class AuthController {
     @GetCurrentUser('refreshToken') refreshToken: string,
     @GetCurrentUserId() userId: string,
   ) {
-    return await this.authService.refreshUser(userId, refreshToken);
+    return await this.authService.refresh(userId, refreshToken);
   }
 }
