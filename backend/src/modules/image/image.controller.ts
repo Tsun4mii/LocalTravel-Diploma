@@ -19,7 +19,9 @@ export class ImageController {
 
   @Post('/multiple')
   @UseInterceptors(FilesInterceptor('files', 10, { storage: storage }))
-  async uploadMultiple(@UploadedFiles() files: Array<Express.Multer.File>) {
+  async uploadMultiple(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ): Promise<Image[]> {
     return await this.imageService.saveMany(files);
   }
 

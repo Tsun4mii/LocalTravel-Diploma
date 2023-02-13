@@ -10,7 +10,7 @@ export class ImageService {
     private readonly imageMapper: ImageMapper,
   ) {}
 
-  async saveMany(files: Array<Express.Multer.File>) {
+  async saveMany(files: Array<Express.Multer.File>): Promise<Image[]> {
     const mappedFiles =
       this.imageMapper.ExpressFilesToImageCreateManyInput(files);
     return await this.imageRepository.saveMany(mappedFiles);
