@@ -3,11 +3,14 @@ import { UserService } from '../user/user.service';
 import { AuthDto } from './dto';
 import { Tokens } from './types';
 import * as bcrypt from 'bcryptjs';
-import { getTokens } from 'src/common/helpers';
+import { UserAuthHelpers } from 'src/common/helpers';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly userAuthHelpers: UserAuthHelpers,
+  ) {}
 
   async register(user: AuthDto): Promise<Tokens> {
     return await this.userService.createUser(user);
@@ -25,9 +28,10 @@ export class AuthService {
     if (!passwordMatches) {
       throw new ForbiddenException('Access Denied');
     }
-    const tokens = await this.userService.getTokens(
+    const tokens = await this.userAuthHelpers.getTokens(
       userExist.id,
       userExist.email,
+      userExist.role,
     );
     await this.userService.updateRtHash(userExist.id, tokens.refresh_token);
     return tokens;
@@ -49,7 +53,11 @@ export class AuthService {
     if (!refreshTokenMatches) {
       throw new ForbiddenException('Access Denied');
     }
-    const tokens = await getTokens(user.id, user.email);
+    const tokens = await this.userAuthHelpers.getTokens(
+      user.id,
+      user.email,
+      user.role,
+    );
     await this.userService.updateRtHash(user.id, tokens.refresh_token);
     return tokens;
   }
