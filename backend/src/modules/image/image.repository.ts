@@ -11,8 +11,8 @@ export class ImageRepository {
     return this.prisma.image.create({ data: data });
   }
 
-  async saveMany(data: Prisma.ImageCreateManyInput[]) {
-    return this.prisma.image.createMany({ data: data });
+  async saveMany(data: Prisma.ImageCreateManyInput[]): Promise<Image[]> {
+    return await Promise.all(await this.mapFileInfoToPromiseArray(data));
   }
 
   async findById(imageId: string): Promise<Image> {
@@ -21,5 +21,11 @@ export class ImageRepository {
         id: imageId,
       },
     });
+  }
+
+  private async mapFileInfoToPromiseArray(
+    data: Prisma.ImageCreateManyInput[],
+  ): Promise<Prisma.Prisma__ImageClient<Image, never>[]> {
+    return data.map((file) => this.prisma.image.create({ data: file }));
   }
 }
