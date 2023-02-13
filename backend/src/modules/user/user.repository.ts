@@ -2,17 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { AuthDto } from '../auth/dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
-import { hashData } from 'src/common/helpers';
+import { UserAuthHelpers } from 'src/common/helpers';
 
 @Injectable()
 export class UserRepository {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
+    private readonly userAuthHelpers: UserAuthHelpers,
   ) {}
 
   async updateRtHash(userId: string, refreshToken: string) {
-    const hash = await hashData(refreshToken);
+    const hash = await this.userAuthHelpers.hashData(refreshToken);
     await this.prisma.user.update({
       where: {
         id: userId,
