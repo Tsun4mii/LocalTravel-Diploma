@@ -15,6 +15,22 @@ enum ROLE {
   ADMIN
 }
 
+enum ADMIN_ROLE {
+  SUPER_CREATOR
+  SUPER_ACCEPTOR
+  ADMIN
+}
+
+model Admin { 
+  id String @id @default(uuid())
+  email String @unique
+  password String
+  role ADMIN_ROLE @default(ADMIN)
+  hashedRt String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model User{
   id String @id @default(uuid())
   email String @unique
@@ -58,4 +74,20 @@ model Image{
   updatedAt DateTime @updatedAt
   
   route Route[]
+}
+
+enum ADMIN_CODE_STATUS {
+  WAITING_FOR_APPROVAL
+  APPROVED
+  USED
+}
+
+model AdminRegistrationCode{
+  id String @id @default(uuid())
+  recipientEmail String
+  codeHash String
+  status ADMIN_CODE_STATUS @default(WAITING_FOR_APPROVAL)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

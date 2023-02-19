@@ -8,6 +8,8 @@ import { RouteModule } from './modules/route/route.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
+import { AdminModule } from './modules/admin/admin.module';
+import { InviteModule } from './modules/invite/invite.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { ConfigModule } from '@nestjs/config';
       serveRoot: '/uploads',
     }),
     ConfigModule.forRoot(),
+    AdminModule,
+    InviteModule,
   ],
   controllers: [AppController],
   providers: [AppService],
