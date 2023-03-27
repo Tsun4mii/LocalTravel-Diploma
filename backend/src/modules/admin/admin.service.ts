@@ -88,4 +88,12 @@ export class AdminService {
     await this.adminRepository.updateRtHash(adminId, tokens.refresh_token);
     return tokens;
   }
+
+  async me(adminId: string) {
+    const admin = await this.adminRepository.findById(adminId);
+    if (!admin) {
+      throw new ForbiddenException('Access Denied');
+    }
+    return await this.adminMapper.HidePrivateInfo(admin);
+  }
 }
