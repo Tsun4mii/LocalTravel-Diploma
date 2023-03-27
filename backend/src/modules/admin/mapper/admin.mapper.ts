@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Admin, Prisma } from '@prisma/client';
 import { hash } from 'bcryptjs';
 import { AdminRegisterDTO } from '../dto';
 
@@ -12,6 +12,14 @@ export class AdminMapper {
     return {
       email: admin.email,
       password: hashedPass,
+    };
+  }
+
+  public async HidePrivateInfo(admin: Admin) {
+    return {
+      id: admin.id,
+      email: admin.email,
+      role: admin.role,
     };
   }
 }

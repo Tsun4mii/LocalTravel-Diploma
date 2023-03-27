@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Get } from '@nestjs/common';
 import { GetCurrentUser, GetCurrentUserId } from 'src/common/decorators';
 import {
   AdminAccessTokenGuard,
@@ -36,5 +36,11 @@ export class AdminController {
     @GetCurrentUser('refreshToken') refreshToken: string,
   ) {
     return await this.adminService.refresh(adminId, refreshToken);
+  }
+
+  @UseGuards(AdminAccessTokenGuard)
+  @Get('/auth/me')
+  async me(@GetCurrentUser('sub') adminId: string) {
+    return await this.adminService.me(adminId);
   }
 }
