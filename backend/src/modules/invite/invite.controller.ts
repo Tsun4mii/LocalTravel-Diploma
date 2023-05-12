@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ADMIN_ROLE } from '@prisma/client';
 import { AdminRoles } from 'src/common/decorators/admin.roles.decorator';
 import { AdminAccessTokenGuard } from 'src/common/guards';
@@ -14,7 +23,8 @@ export class InviteController {
   @UseGuards(AdminAccessTokenGuard, AdminRolesGuard)
   @Post('/create')
   async createInvite(@Body() invite: InviteDTO) {
-    return await this.createInvite(invite);
+    console.log(invite);
+    return await this.inviteService.createInvite(invite);
   }
 
   @AdminRoles(ADMIN_ROLE.SUPER_ACCEPTOR)
@@ -29,5 +39,12 @@ export class InviteController {
   @Get()
   async getAllUnaccepted() {
     return await this.inviteService.findAllUnaccepted();
+  }
+
+  @AdminRoles(ADMIN_ROLE.SUPER_ACCEPTOR)
+  @UseGuards(AdminAccessTokenGuard, AdminRolesGuard)
+  @Delete('/:id')
+  async delete(@Param('id', new ParseUUIDPipe()) inviteId: string) {
+    return await this.inviteService.delete(inviteId);
   }
 }

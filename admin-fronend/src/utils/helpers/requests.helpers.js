@@ -129,3 +129,31 @@ export const patchAuthRequest = async (url, body) => {
   }
   return response;
 };
+
+export const deleteAuthRequest = async (url) => {
+  const { access_token } = parseCookies();
+
+  const request = await fetch(`${process.env.REACT_APP_API_BASE}${url}`, {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token}`,
+    },
+    method: "DELETE",
+  });
+  const response = await request.json();
+  if (response.statusCode === 401) {
+    await postRefreshRequest();
+    const { access_token } = parseCookies();
+    const request = await fetch(`${process.env.REACT_APP_API_BASE}${url}`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${access_token}`,
+      },
+      method: "DELETE",
+    });
+    return await request.json();
+  }
+  return response;
+};

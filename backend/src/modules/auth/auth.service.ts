@@ -1,9 +1,10 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
-import { AuthDto } from './dto';
+import { AuthDto, RegisterDTO } from './dto';
 import { Tokens } from './types';
 import * as bcrypt from 'bcryptjs';
 import { UserAuthHelpers } from 'src/common/helpers';
+import { UpdateDTO } from './dto/update.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +13,7 @@ export class AuthService {
     private readonly userAuthHelpers: UserAuthHelpers,
   ) {}
 
-  async register(user: AuthDto): Promise<Tokens> {
+  async register(user: RegisterDTO): Promise<Tokens> {
     return await this.userService.createUser(user);
   }
 
@@ -38,7 +39,7 @@ export class AuthService {
   }
 
   async logout(userId: string) {
-    await this.userService.updateOnLogout(userId);
+    return await this.userService.updateOnLogout(userId);
   }
 
   async refresh(userId: string, refreshToken: string) {
@@ -60,5 +61,17 @@ export class AuthService {
     );
     await this.userService.updateRtHash(user.id, tokens.refresh_token);
     return tokens;
+  }
+
+  async me(userId: string) {
+    const user = await this.userService.findById(userId);
+    if (!user) {
+      throw new ForbiddenException('Access Denied');
+    }
+    return user;
+  }
+
+  async update(userId: string, updateData: UpdateDTO) {
+    return await this.userService.updateUser(userId, updateData);
   }
 }

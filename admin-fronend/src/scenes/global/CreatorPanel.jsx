@@ -7,7 +7,7 @@ const CreatorPanel = ({ selected, setSelected }) => {
     <>
       <Item
         title="Create Invite"
-        to="/create-invite"
+        to="/invites/create"
         icon={<AddLocationIcon />}
         selected={selected}
         setSelected={setSelected}

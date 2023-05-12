@@ -4,9 +4,6 @@ import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../utils/theme";
 import "react-pro-sidebar/dist/css/styles.css";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import RouteIcon from "@mui/icons-material/Route";
-import ContactMailIcon from "@mui/icons-material/ContactMail";
-import AddLocationIcon from "@mui/icons-material/AddLocation";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import Item from "./Item";
 import { useSelector, useDispatch } from "react-redux";
@@ -44,8 +41,7 @@ const AdminSidebar = () => {
   let menus = <></>;
   if (userRole === ROLES.acceptor) {
     menus = <AcceptorPanel selected={selected} setSelected={setSelected} />;
-  }
-  if (userRole === ROLES.creator) {
+  } else if (userRole === ROLES.creator) {
     menus = <CreatorPanel selected={selected} setSelected={setSelected} />;
   } else {
     menus = <AdminPanel selected={selected} setSelected={setSelected} />;

@@ -18,4 +18,7 @@ export class PointParamSearchDTO {
   @IsOptional()
   @IsObject()
   orderBy?: object;
+  @IsOptional()
+  @IsObject()
+  include?: object;
 }

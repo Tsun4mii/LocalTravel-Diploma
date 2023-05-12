@@ -18,6 +18,13 @@ import { useEffect } from "react";
 import Invites from "./scenes/invites/Invites";
 import Routes from "./scenes/routes/Routes";
 import EditRoute from "./scenes/routes/EditRoute";
+import CreateInvite from "./scenes/invites/CreateInvite";
+import Categories from "./scenes/categories/Categories";
+import EditCategory from "./scenes/categories/EditCategory";
+import CreateCategory from "./scenes/categories/CreateCategory";
+import Countries from "./scenes/countries/Countries";
+import EditCountry from "./scenes/countries/EditCountry";
+import CreateCountry from "./scenes/countries/CreateCountry";
 import CreateRoute from "./scenes/routes/CreateRoute";
 
 function App() {
@@ -39,11 +46,22 @@ function App() {
           </Route>
           <Route path="/invites" element={<ProtectedRoute />}>
             <Route index element={<Invites />} />
+            <Route path="/invites/create" element={<CreateInvite />} />
           </Route>
           <Route path="/routes" element={<ProtectedRoute />}>
             <Route index element={<Routes />} />
             <Route path="/routes/edit/:id" element={<EditRoute />} />
             <Route path="/routes/create" element={<CreateRoute />} />
+          </Route>
+          <Route path="/categories" element={<ProtectedRoute />}>
+            <Route index element={<Categories />} />
+            <Route path="/categories/edit/:id" element={<EditCategory />} />
+            <Route path="/categories/create" element={<CreateCategory />} />
+          </Route>
+          <Route path="/countries" element={<ProtectedRoute />}>
+            <Route index element={<Countries />} />
+            <Route path="/countries/edit/:id" element={<EditCountry />} />
+            <Route path="/countries/create" element={<CreateCountry />} />
           </Route>
         </Route>
         <Route path="/signin" element={<Signin />} />

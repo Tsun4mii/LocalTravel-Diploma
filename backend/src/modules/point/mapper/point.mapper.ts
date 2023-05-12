@@ -12,6 +12,8 @@ export class PointMapper {
       name: point.name,
       lat: point.lat,
       lon: point.lon,
+      address: point.address,
+      country: { connect: { id: point.countryId } },
     };
   }
 
@@ -33,6 +35,7 @@ export class PointMapper {
       skip: params.skip,
       where: params.where,
       orderBy: params.orderBy,
+      include: params.include,
     };
   }
 }
