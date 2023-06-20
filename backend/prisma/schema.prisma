@@ -12,19 +12,53 @@ datasource db {
 
 enum ROLE { 
   USER
+  PREMIUM
+}
+
+enum ADMIN_ROLE {
+  SUPER_CREATOR
+  SUPER_ACCEPTOR
   ADMIN
+}
+
+model Admin { 
+  id String @id @default(uuid())
+  email String @unique
+  password String
+  role ADMIN_ROLE @default(ADMIN)
+  hashedRt String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model User{
   id String @id @default(uuid())
-  email String
+  email String @unique
+  username String?
   password String
   role ROLE @default(USER)
   hashedRt String?
+  about String @default("")
+  stripeId String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  avatar Image[]
   routes Route[]
+  comments Comment[]
+  following Follow[] @relation("follower")
+  followers Follow[] @relation("following")
+}
+
+model Follow {
+  id String @id @default(uuid())
+  notify Boolean @default(true)
+  
+  followerId String
+  follower User @relation("follower",fields: [followerId], references: [id], onDelete: Cascade)
+
+  followingIs String
+  followed User @relation("following",fields: [followingIs], references: [id], onDelete: Cascade)
 }
 
 model Point{
@@ -32,20 +66,83 @@ model Point{
   name String
   lat String
   lon String
+  address String @default("")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  country Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  countryId String @default("6c78bd0d-ae6c-4df8-9025-5f699d26cf2c")
   routes Route[]
 }
 
 model Route{ 
   id String @id @default(uuid())
   name String
-  description String
+  short_description String @default("Short description") 
+  description String @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id])
   userId String 
   points Point[]
+  images Image[]
+  categories Category[]
+  country Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  countryId String
+
+  comments Comment[]
+}
+
+model Comment{
+  id String @id @default(uuid())
+  text String
+
+  userId String 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  routeId String
+  route Route @relation(fields: [routeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Image{
+  id String @id @default(uuid())
+  uriPath String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  route Route[]
+  user User[]
+}
+
+enum ADMIN_CODE_STATUS {
+  WAITING_FOR_APPROVAL
+  APPROVED
+  USED
+}
+
+model AdminRegistrationCode{
+  id String @id @default(uuid())
+  recipientEmail String
+  codeHash String
+  status ADMIN_CODE_STATUS @default(WAITING_FOR_APPROVAL)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Country{
+  id String @id @default(uuid())
+  countryName String
+  points Point[]
+  routes Route[]
+}
+
+model Category{ 
+  id String @id @default(uuid())
+  categoryName String
+  route Route[]
 }

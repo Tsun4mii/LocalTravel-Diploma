@@ -10,4 +10,10 @@ export class CreatePointDTO {
   @IsNotEmpty()
   @IsString()
   lon: string;
+  @IsNotEmpty()
+  @IsString()
+  address: string;
+  @IsNotEmpty()
+  @IsString()
+  countryId: string;
 }

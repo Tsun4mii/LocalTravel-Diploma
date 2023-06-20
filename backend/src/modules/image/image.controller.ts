@@ -1,5 +1,8 @@
 import {
   Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
   Post,
   UploadedFile,
   UploadedFiles,
@@ -8,6 +11,7 @@ import {
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { storage } from './config/storage.config';
 import { ImageService } from './image.service';
+import { Image } from './types';
 
 @Controller('image')
 export class ImageController {
@@ -15,13 +19,22 @@ export class ImageController {
 
   @Post('/multiple')
   @UseInterceptors(FilesInterceptor('files', 10, { storage: storage }))
-  uploadMultiple(@UploadedFiles() files: Array<Express.Multer.File>) {
-    console.log(files);
+  async uploadMultiple(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ): Promise<Image[]> {
+    return await this.imageService.saveMany(files);
   }
 
   @Post('/single')
   @UseInterceptors(FileInterceptor('file', { storage: storage }))
-  uploadSingle(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
+  async uploadSingle(@UploadedFile() file: Express.Multer.File) {
+    return await this.imageService.saveSingle(file);
+  }
+
+  @Get('/:id')
+  async findById(
+    @Param('id', new ParseUUIDPipe()) imageId: string,
+  ): Promise<Image> {
+    return await this.imageService.findById(imageId);
   }
 }

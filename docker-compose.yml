@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:5.7.39
+    container_name: mysql_db
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: "17052002"
+      MYSQL_DATABASE: "diploma"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    container_name: backend
+    depends_on:
+      - db
+    env_file:
+      - ./backend/.docker.env
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    restart: always
+    container_name: client
+    depends_on:
+      - backend
+    ports:
+      - 3001:3001
+    expose:
+      - 3001
+
+  admin:
+    build:
+      context: ./admin-fronend
+      dockerfile: Dockerfile
+    restart: always
+    container_name: admin
+    depends_on:
+      - backend
+    ports:
+      - 3002:3002
+    expose:
+      - 3002

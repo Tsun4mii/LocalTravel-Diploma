@@ -12,4 +12,9 @@ export class RouteInclude {
     toClassOnly: true,
   })
   user?: boolean;
+  @IsOptional()
+  @Transform(({ value }) => (value == 'true' ? true : false), {
+    toClassOnly: true,
+  })
+  images?: boolean;
 }

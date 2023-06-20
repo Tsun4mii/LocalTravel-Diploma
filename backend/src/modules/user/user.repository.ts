@@ -1,52 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { AuthDto } from '../auth/dto';
+import { AuthDto, RegisterDTO } from '../auth/dto';
 import { PrismaService } from '../prisma/prisma.service';
-import * as bcrypt from 'bcryptjs';
-import { Tokens } from '../auth/types';
 import { JwtService } from '@nestjs/jwt';
+import { UserAuthHelpers } from 'src/common/helpers';
+import { Prisma, ROLE } from '@prisma/client';
 
 @Injectable()
 export class UserRepository {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
+    private readonly userAuthHelpers: UserAuthHelpers,
   ) {}
 
-  hashData(data: string) {
-    return bcrypt.hash(data, 10);
-  }
-
-  async getTokens(userId: string, email: string): Promise<Tokens> {
-    const [at, rt] = await Promise.all([
-      this.jwt.signAsync(
-        {
-          sub: userId,
-          email: email,
-        },
-        {
-          secret: 'at-secret',
-          expiresIn: 60 * 15,
-        },
-      ),
-      this.jwt.signAsync(
-        {
-          sub: userId,
-          email: email,
-        },
-        {
-          secret: 'rt-secret',
-          expiresIn: 60 * 60 * 24 * 7,
-        },
-      ),
-    ]);
-    return {
-      access_token: at,
-      refresh_token: rt,
-    };
-  }
-
   async updateRtHash(userId: string, refreshToken: string) {
-    const hash = await this.hashData(refreshToken);
+    const hash = await this.userAuthHelpers.hashData(refreshToken);
     await this.prisma.user.update({
       where: {
         id: userId,
@@ -57,11 +25,13 @@ export class UserRepository {
     });
   }
 
-  async createUser(user: AuthDto, hash: string) {
+  async createUser(user: RegisterDTO, hash: string, stripeId: string) {
     const newUser = await this.prisma.user.create({
       data: {
         email: user.email,
         password: hash,
+        username: user.username,
+        stripeId: stripeId,
       },
     });
     return newUser;
@@ -80,9 +50,15 @@ export class UserRepository {
       where: {
         id: id,
       },
+      include: {
+        avatar: true,
+        routes: true,
+        followers: { include: { follower: true } },
+        following: { include: { followed: true } },
+      },
     });
   }
-
+  o: Prisma.UserArgs;
   async deleteUser(id: string) {
     return this.prisma.user.delete({
       where: {
@@ -92,7 +68,7 @@ export class UserRepository {
   }
 
   async updateOnLogout(userId: string) {
-    await this.prisma.user.updateMany({
+    return await this.prisma.user.updateMany({
       where: {
         id: userId,
         hashedRt: {
@@ -101,6 +77,19 @@ export class UserRepository {
       },
       data: {
         hashedRt: null,
+      },
+    });
+  }
+
+  async update(userId: string, data: Prisma.UserUpdateInput) {
+    return await this.prisma.user.update({ where: { id: userId }, data: data });
+  }
+
+  async updateRole(userId: string, role: ROLE) {
+    return await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        role: role,
       },
     });
   }

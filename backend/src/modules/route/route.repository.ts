@@ -25,7 +25,7 @@ export class RouteRepository {
     return await this.prisma.route.delete({ where: { id: routeId } });
   }
 
-  async findById(routeId: string): Promise<Route> {
-    return await this.prisma.route.findUnique({ where: { id: routeId } });
+  async findById(params: Prisma.RouteFindFirstArgs): Promise<Route> {
+    return await this.prisma.route.findFirst(params);
   }
 }
