@@ -15,6 +15,8 @@ import {
 } from "@mui/material";
 import TableHeader from "../../components/data/TableHeader";
 import MuiAlert from "@mui/material/Alert";
+import NotificationSnackBar from "../../components/data/NotificationSnackBar";
+import { pointUpdateSchema } from "../../utils/schemas/point.update.schema";
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -31,12 +33,17 @@ const EditPoint = () => {
   const [lon, setLon] = useState("");
   const [open, setOpen] = useState(false);
 
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [message, setMessage] = useState("");
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-
-    setOpen(false);
+    setOpenError(false);
+    setOpenSuccess(false);
+    setMessage("");
   };
 
   useEffect(() => {
@@ -52,26 +59,29 @@ const EditPoint = () => {
 
   const handleUpdate = async () => {
     try {
-      const response = await patchAuthRequest(`/point/${id}`, {
+      const point = await pointUpdateSchema.validate({
         name: name,
         lat: lat,
         lon: lon,
       });
-      setOpen(true);
-      console.log(response);
+      const response = await patchAuthRequest(`/point/${id}`, point);
+      setMessage("Точка изменена");
+      setOpenSuccess(true);
     } catch (error) {
-      console.log(error);
+      setMessage(error.message);
+      setOpenError(true);
     }
   };
 
   return (
     <Box m="20px">
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-          This is a success message!
-        </Alert>
-      </Snackbar>
-      <TableHeader title="Point" subtitle="Edit point" />
+      <NotificationSnackBar
+        openError={openError}
+        openSuccess={openSuccess}
+        handleClose={handleClose}
+        message={message}
+      />
+      <TableHeader title="Точки" subtitle="Изменить точку" />
       <Box m="40px 0 0 0" alignContent="center" display="flex">
         <Stack
           direction={{ xs: "column", sm: "row" }}
@@ -79,7 +89,7 @@ const EditPoint = () => {
         >
           <TextField
             id="outlined-required"
-            label="Point name"
+            label="Наименование точки"
             value={name}
             color="secondary"
             onChange={(e) => setName(e.target.value)}
@@ -87,7 +97,7 @@ const EditPoint = () => {
           />
           <TextField
             id="outlined-required"
-            label="Point latitude"
+            label="Широта"
             value={lat}
             color="secondary"
             onChange={(e) => setLat(e.target.value)}
@@ -95,7 +105,7 @@ const EditPoint = () => {
           />
           <TextField
             id="outlined-required"
-            label="Point longitude"
+            label="Долгота"
             value={lon}
             color="secondary"
             onChange={(e) => setLon(e.target.value)}
@@ -109,12 +119,13 @@ const EditPoint = () => {
         alignItems="center"
       >
         <Button
+          sx={{ marginTop: 2 }}
           type="submit"
           variant="contained"
           color="secondary"
           onClick={handleUpdate}
         >
-          Save
+          Сохранить
         </Button>
       </Stack>
     </Box>

@@ -7,4 +7,7 @@ export class UpdateRouteDTO {
   @IsOptional()
   @IsString()
   description?: string;
+  @IsOptional()
+  @IsString()
+  short_description?: string;
 }

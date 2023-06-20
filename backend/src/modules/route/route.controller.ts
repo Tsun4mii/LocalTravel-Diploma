@@ -13,9 +13,10 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { GetCurrentUserId } from 'src/common/decorators';
-import { AccessTokenGuard } from 'src/common/guards';
+import { AccessTokenGuard, AdminAccessTokenGuard } from 'src/common/guards';
 import { CreateRouteDTO } from './dto/route.create.dto';
 import { FindRouteDTO } from './dto/route.find.dto';
+import { FindOneRouteDTO } from './dto/route.findone.dto';
 import { UpdateRouteDTO } from './dto/route.update.dto';
 import { RouteService } from './route.service';
 import { Route } from './types';
@@ -31,6 +32,15 @@ export class RouteController {
     @GetCurrentUserId() userId: string,
   ): Promise<Route> {
     return await this.routeService.create(route, userId);
+  }
+
+  @Post('/create/admin')
+  @UseGuards(AdminAccessTokenGuard)
+  async createAdmin(
+    @Body() route: CreateRouteDTO,
+    @GetCurrentUserId() userId: string,
+  ): Promise<Route> {
+    return await this.routeService.createByAdmin(route, userId);
   }
 
   @Get()
@@ -57,7 +67,8 @@ export class RouteController {
   @Get('/:id')
   async findById(
     @Param('id', new ParseUUIDPipe()) routeId: string,
+    @Query() params: FindOneRouteDTO,
   ): Promise<Route> {
-    return await this.routeService.findById(routeId);
+    return await this.routeService.findById(routeId, params);
   }
 }

@@ -5,18 +5,83 @@ import {
   Typography,
   TextField,
   Button,
+  List,
+  ListItem,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useTheme } from "@mui/material";
 import { tokens } from "../../utils/theme";
 import Paper from "@mui/material/Paper";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { adminSchema } from "../../utils/schemas/adminReg.schema";
+import {
+  getAuthRequest,
+  postRequest,
+} from "../../utils/helpers/requests.helpers";
+import { setAuthCookies } from "../../utils/helpers/cookies.helpers";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setUserData } from "../../redux/reducers/userSlice";
+import NotificationSnackBar from "../../components/data/NotificationSnackBar";
 const Signup = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const reduxDispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [code, setCode] = useState("");
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+    setOpenSuccess(false);
+    setMessage("");
+  };
+
+  const handleSignup = async (e) => {
+    try {
+      e.preventDefault();
+
+      const admin = await adminSchema.validate({
+        email: email,
+        password: password,
+        code: code,
+      });
+      const tokens = await postRequest("/admin/auth/local/signup", admin);
+      if (tokens.statusCode === 403) {
+        throw new Error("Неверный код или адрес электронной почты");
+      }
+      setAuthCookies(tokens);
+      const userData = await getAuthRequest("/admin/auth/me");
+      console.log(userData);
+      reduxDispatch(
+        setUserData({ email: userData.email, role: userData.role })
+      );
+      setMessage("Registration successful");
+      setOpenSuccess(true);
+      return navigate("/");
+    } catch (error) {
+      setMessage(error.message);
+      setOpenError(true);
+    }
+  };
+
   return (
     <>
       <Grid container component="main" sx={{ height: "100vh" }}>
+        <NotificationSnackBar
+          openError={openError}
+          openSuccess={openSuccess}
+          handleClose={handleClose}
+          message={message}
+        />
         <Grid
           item
           xs={false}
@@ -54,37 +119,70 @@ const Signup = () => {
             >
               LT Admin Sign Up
             </Typography>
-            <Box component="form" noValidate sx={{ mt: 1 }}>
+            <Box
+              component="form"
+              noValidate
+              sx={{ mt: 1 }}
+              onSubmit={handleSignup}
+            >
               <TextField
                 margin="normal"
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Почта"
                 name="email"
                 autoComplete="email"
                 color="secondary"
+                onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
                 margin="normal"
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="Пароль"
                 type="password"
                 id="password"
                 autoComplete="current-password"
                 color="secondary"
+                onChange={(e) => setPassword(e.target.value)}
               />
+              <Typography> Требования к паролю:</Typography>
+              <List
+                sx={{
+                  listStyleType: "disc",
+                  pl: 2,
+                  marginLeft: 3,
+                  "& .MuiListItem-root": {
+                    display: "list-item",
+                  },
+                }}
+              >
+                <ListItem sx={{ margin: 0, padding: 0 }}>
+                  <Typography>Длина от 8 до 15</Typography>
+                </ListItem>
+                <ListItem sx={{ margin: 0, padding: 0 }}>
+                  <Typography>
+                    Минимум 1 символ в врехнем регистре и 1 в нижнем
+                  </Typography>
+                </ListItem>
+                <ListItem sx={{ margin: 0, padding: 0 }}>
+                  <Typography>
+                    Минимум 1 цифра и 1 специальный символ (\d@$!%*?&_)
+                  </Typography>
+                </ListItem>
+              </List>
               <TextField
                 margin="normal"
                 required
                 fullWidth
                 name="code"
-                label="code"
+                label="Код"
                 type="password"
                 id="code"
                 color="secondary"
+                onChange={(e) => setCode(e.target.value)}
               />
               <Button
                 type="submit"
@@ -93,7 +191,9 @@ const Signup = () => {
                 color="secondary"
                 sx={{ mt: 3, mb: 2, bgcolor: colors.greenAccent[500] }}
               >
-                <Typography color={colors.primary[500]}>Sign Up</Typography>
+                <Typography color={colors.primary[500]}>
+                  Зарегистрироваться
+                </Typography>
               </Button>
             </Box>
           </Box>

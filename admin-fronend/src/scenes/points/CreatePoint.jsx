@@ -3,6 +3,8 @@ import { tokens } from "../../utils/theme";
 import { Box, useTheme, TextField, Button, Stack } from "@mui/material";
 import TableHeader from "../../components/data/TableHeader";
 import { postAuthRequest } from "../../utils/helpers/requests.helpers";
+import { pointSchema } from "../../utils/schemas/point.schema";
+import NotificationSnackBar from "../../components/data/NotificationSnackBar";
 
 const CreatePoint = () => {
   const theme = useTheme();
@@ -11,23 +13,51 @@ const CreatePoint = () => {
   const [name, setName] = useState("");
   const [lat, setLat] = useState("");
   const [lon, setLon] = useState("");
+  const [address, setAddress] = useState("");
+  const [countryId, setCountryId] = useState("");
+
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+    setOpenSuccess(false);
+    setMessage("");
+  };
 
   const handleCreate = async () => {
     try {
-      const response = await postAuthRequest("/point", {
+      const point = await pointSchema.validate({
         name: name,
-        lat: lat,
         lon: lon,
+        lat: lat,
+        countryId: countryId,
+        address: address,
       });
-      console.log(response);
+      const response = await postAuthRequest("/point", point);
+      if (response) {
+        setMessage("Точка добавлена");
+        return setOpenSuccess(true);
+      }
     } catch (error) {
-      return console.log(error);
+      setMessage(error.message);
+      return setOpenError(true);
     }
   };
 
   return (
     <Box m="20px">
-      <TableHeader title="Point" subtitle="Edit point" />
+      <NotificationSnackBar
+        openError={openError}
+        openSuccess={openSuccess}
+        handleClose={handleClose}
+        message={message}
+      />
+      <TableHeader title="Точки" subtitle="Добавить точку" />
       <Box m="40px 0 0 0" alignContent="center" display="flex">
         <Stack
           direction={{ xs: "column", sm: "row" }}
@@ -35,7 +65,7 @@ const CreatePoint = () => {
         >
           <TextField
             id="outlined-required"
-            label="Point name"
+            label="Наименование точки"
             value={name}
             color="secondary"
             onChange={(e) => setName(e.target.value)}
@@ -43,7 +73,7 @@ const CreatePoint = () => {
           />
           <TextField
             id="outlined-required"
-            label="Point latitude"
+            label="Широта"
             value={lat}
             color="secondary"
             onChange={(e) => setLat(e.target.value)}
@@ -51,21 +81,38 @@ const CreatePoint = () => {
           />
           <TextField
             id="outlined-required"
-            label="Point longitude"
+            label="Долгота"
             value={lon}
             color="secondary"
             onChange={(e) => setLon(e.target.value)}
             maxRows={1}
           />
+          <TextField
+            id="outlined-required"
+            label="Адрес"
+            value={address}
+            color="secondary"
+            onChange={(e) => setAddress(e.target.value)}
+            maxRows={1}
+          />
+          <TextField
+            id="outlined-required"
+            label="ID страны"
+            value={countryId}
+            color="secondary"
+            onChange={(e) => setCountryId(e.target.value)}
+            maxRows={1}
+          />
         </Stack>
       </Box>
       <Button
+        sx={{ marginTop: 2 }}
         type="submit"
         variant="contained"
         color="secondary"
         onClick={(e) => handleCreate()}
       >
-        Create
+        Добавить
       </Button>
     </Box>
   );

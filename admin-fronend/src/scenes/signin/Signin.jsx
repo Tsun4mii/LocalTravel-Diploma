@@ -21,6 +21,7 @@ import {
 } from "../../utils/helpers/requests.helpers";
 import { useNavigate } from "react-router-dom";
 import { setAuthCookies } from "../../utils/helpers/cookies.helpers";
+import NotificationSnackBar from "../../components/data/NotificationSnackBar";
 
 const Signin = () => {
   const theme = useTheme();
@@ -30,22 +31,51 @@ const Signin = () => {
   const reduxDispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+    setOpenSuccess(false);
+    setMessage("");
+  };
+
   const handleSignin = async (e) => {
-    e.preventDefault();
-    const tokens = await postRequest("/admin/auth/local/signin", {
-      email: email,
-      password: password,
-    });
-    setAuthCookies(tokens);
-    const userData = await getAuthRequest("/admin/auth/me");
-    console.log(userData);
-    reduxDispatch(setUserData({ email: userData.email, role: userData.role }));
-    return navigate("/");
+    try {
+      e.preventDefault();
+      const tokens = await postRequest("/admin/auth/local/signin", {
+        email: email,
+        password: password,
+      });
+      if (tokens.statusCode === 403) {
+        throw new Error("Неверный адрес электронной почты или пароль");
+      }
+      setAuthCookies(tokens);
+      const userData = await getAuthRequest("/admin/auth/me");
+      console.log(userData);
+      reduxDispatch(
+        setUserData({ email: userData.email, role: userData.role })
+      );
+      return navigate("/");
+    } catch (error) {
+      setMessage(error.message);
+      setOpenError(true);
+    }
   };
 
   return (
     <>
       <Grid container component="main" sx={{ height: "100vh" }}>
+        <NotificationSnackBar
+          openError={openError}
+          openSuccess={openSuccess}
+          handleClose={handleClose}
+          message={message}
+        />
         <Grid
           item
           xs={false}
@@ -94,7 +124,7 @@ const Signin = () => {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Адрес электронной почты"
                 name="email"
                 autoComplete="email"
                 color="secondary"
@@ -105,7 +135,7 @@ const Signin = () => {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="Пароль"
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -119,20 +149,8 @@ const Signin = () => {
                 color="secondary"
                 sx={{ mt: 3, mb: 2, bgcolor: colors.greenAccent[500] }}
               >
-                <Typography color={colors.primary[500]}>Sign In</Typography>
+                <Typography color={colors.primary[500]}>Войти</Typography>
               </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" color="secondary">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="#" color="secondary">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
             </Box>
           </Box>
         </Grid>

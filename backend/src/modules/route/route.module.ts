@@ -5,9 +5,10 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { UserModule } from '../user/user.module';
 import { RouteRepository } from './route.repository';
 import { RouteMapper } from './mapper/route.mapper';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
-  imports: [PrismaModule, UserModule],
+  imports: [PrismaModule, UserModule, MailModule],
   providers: [RouteService, RouteRepository, RouteMapper],
   controllers: [RouteController],
   exports: [RouteService],

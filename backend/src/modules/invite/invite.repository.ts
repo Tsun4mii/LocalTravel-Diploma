@@ -60,4 +60,10 @@ export class InviteRepository {
       },
     });
   }
+
+  async delete(inviteId: string) {
+    return await this.prisma.adminRegistrationCode.delete({
+      where: { id: inviteId },
+    });
+  }
 }

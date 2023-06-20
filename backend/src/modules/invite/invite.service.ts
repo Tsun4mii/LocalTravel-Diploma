@@ -46,4 +46,8 @@ export class InviteService {
   async findAllUnaccepted() {
     return await this.inviteRepository.findAllUnaccepted();
   }
+
+  async delete(inviteId: string) {
+    return await this.inviteRepository.delete(inviteId);
+  }
 }
