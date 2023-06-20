@@ -3,6 +3,7 @@ import {
   Button,
   CircularProgress,
   Grid,
+  Icon,
   IconButton,
   Input,
   List,
@@ -18,11 +19,15 @@ import {
   getAuthRequest,
   postAuthRequest,
   patchAuthRequest,
+  deleteAuthRequest,
 } from "../../utils/helpers/request.helpers";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import ProfRouteItem from "../../components/Route/ProfRouteItem";
 import NotificationSnackBar from "../../components/Notification/NotificationSnackBar";
 import { useTranslation } from "react-i18next";
+import StarIcon from "@mui/icons-material/Star";
+import { Link, useNavigate } from "react-router-dom";
+import PrivProfRouteItem from "../../components/Route/PrivProfRouteItem";
 
 const style = {
   position: "absolute",
@@ -81,6 +86,8 @@ const Profile = () => {
   const [openSuccess, setOpenSuccess] = useState(false);
   const [message, setMessage] = useState("");
 
+  const navigator = useNavigate();
+
   useEffect(() => {
     const dataFetch = async () => {
       const data = await getAuthRequest(`/auth/me`);
@@ -124,6 +131,21 @@ const Profile = () => {
       const newUserData = await getAuthRequest("/auth/me");
       setUserData(newUserData);
       setMessage("About updated");
+      setOpenSuccess(true);
+      return;
+    } catch (error) {
+      setMessage(error.message);
+      setOpenError(true);
+      return;
+    }
+  };
+
+  const deleteRoute = async (id) => {
+    try {
+      const deleteR = await deleteAuthRequest(`/route/${id}`);
+      const newUserData = await getAuthRequest("/auth/me");
+      setUserData(newUserData);
+      setMessage("Маршрут удален");
       setOpenSuccess(true);
       return;
     } catch (error) {
@@ -234,10 +256,32 @@ const Profile = () => {
                     <Typography fontFamily={"Archivo Black"}>
                       {userData.username}
                     </Typography>
+                    {userData.role === "PREMIUM" ? (
+                      <Icon>
+                        <StarIcon color="secondary" />
+                      </Icon>
+                    ) : (
+                      <></>
+                    )}
                     <IconButton onClick={(e) => handleOpen()}>
                       <EditNoteIcon />
                     </IconButton>
                   </Stack>
+                  <Spacer y={0.5} />
+                  {userData.role === "PREMIUM" ? (
+                    <Link to="/profile/subscription/end">
+                      <Button variant="contained" color="secondary">
+                        <Typography
+                          fontSize={10}
+                          fontFamily={["Archivo Black", "Russo One"]}
+                        >
+                          {t("CSub")}
+                        </Typography>
+                      </Button>
+                    </Link>
+                  ) : (
+                    <></>
+                  )}
                   <Spacer y={0.5} />
                   <Divider />
                   <Spacer y={0.5} />
@@ -266,11 +310,12 @@ const Profile = () => {
                   {userData.routes.length > 0 ? (
                     <List sx={{ width: "100%", overflowY: "scroll" }}>
                       {userData.routes.map((route, i) => (
-                        <ProfRouteItem
+                        <PrivProfRouteItem
                           name={route.name}
                           short_description={route.short_description}
                           key={i}
                           id={route.id}
+                          deleteRoute={deleteRoute}
                         />
                       ))}
                     </List>

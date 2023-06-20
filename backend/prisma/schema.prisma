@@ -39,6 +39,7 @@ model User{
   role ROLE @default(USER)
   hashedRt String?
   about String @default("")
+  stripeId String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -69,7 +70,7 @@ model Point{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  country Country @relation(fields: [countryId], references: [id])
+  country Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
   countryId String @default("6c78bd0d-ae6c-4df8-9025-5f699d26cf2c")
   routes Route[]
 }
@@ -87,7 +88,7 @@ model Route{
   points Point[]
   images Image[]
   categories Category[]
-  country Country @relation(fields: [countryId], references: [id])
+  country Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
   countryId String
 
   comments Comment[]

@@ -163,7 +163,7 @@ const CreateRoute = () => {
       });
       const result = await postAuthRequest("/route", route);
       if (result) {
-        setMessage("Route created");
+        setMessage("Маршрут создан");
         setOpenSuccess(true);
       }
       return console.log(result);

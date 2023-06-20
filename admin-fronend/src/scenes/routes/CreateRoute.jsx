@@ -162,7 +162,7 @@ const CreateRoute = () => {
       });
       const result = await postAuthRequest("/route/create/admin", route);
       if (result) {
-        setMessage("Route created");
+        setMessage("Маршрут добавлен");
         setOpenSuccess(true);
       }
       return console.log(result);
@@ -196,14 +196,14 @@ const CreateRoute = () => {
                 <Stack direction="column" sx={{ width: "50%" }}>
                   <Typography>{name.length}/100</Typography>
                   <TextField
-                    label={"Route name"}
+                    label={"Наименование маршрута"}
                     color="secondary"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     error={name.length < 10 ? true : false}
                     helperText={
                       name.length < 10
-                        ? "The name must be at least 10 characters long"
+                        ? "Наименование должно быть длиной минимум 10 символов"
                         : ""
                     }
                     fullWidth
@@ -213,7 +213,7 @@ const CreateRoute = () => {
                 <Stack direction="column" sx={{ width: "50%" }}>
                   <Typography>{short_description.length}/180</Typography>
                   <TextField
-                    label="Short description"
+                    label="Короткое описание"
                     color="secondary"
                     value={short_description}
                     fullWidth
@@ -222,7 +222,7 @@ const CreateRoute = () => {
                     error={short_description.length < 30 ? true : false}
                     helperText={
                       short_description.length < 30
-                        ? "The short description must be at least 30 characters long"
+                        ? "Короткое описание должно быть длиной минимум 30 символов"
                         : ""
                     }
                   />
@@ -230,7 +230,7 @@ const CreateRoute = () => {
               </Stack>
               <Typography>{description.length}/2000</Typography>
               <TextField
-                label="Description"
+                label="Описание"
                 fullWidth
                 multiline
                 rows={10}
@@ -240,12 +240,17 @@ const CreateRoute = () => {
                 error={description.length < 50 ? true : false}
                 helperText={
                   description.length < 50
-                    ? "The description must be at least 50 characters long"
+                    ? "Описание должно быть длиной мнимум 50 символов"
                     : ""
                 }
               />
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Typography>Country:</Typography>
+              <Stack
+                direction="row"
+                spacing={2}
+                alignItems="center"
+                sx={{ marginTop: 2, marginBottom: 2 }}
+              >
+                <Typography>Страна:</Typography>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
@@ -262,7 +267,7 @@ const CreateRoute = () => {
                       ))
                     : ""}
                 </Select>
-                <Typography>Select categories:</Typography>
+                <Typography>Выберите категории:</Typography>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
@@ -292,11 +297,14 @@ const CreateRoute = () => {
                 />
                 <label htmlFor="raised-button-file">
                   <Button variant="raised" component="span">
-                    Upload
+                    Загрузить фото
                   </Button>
                 </label>
               </Stack>
-              <TextField onChange={debouncedOnSearch} label="Point name" />
+              <TextField
+                onChange={debouncedOnSearch}
+                label="Наименование точки"
+              />
               <List sx={{ width: "100%", overflowY: "scroll" }}>
                 {pointSearch !== undefined
                   ? pointSearch.map((point, i) => (
@@ -322,7 +330,7 @@ const CreateRoute = () => {
                               variant="contained"
                               color="secondary"
                             >
-                              Add
+                              Добавить
                             </Button>
                           </CardContent>
                         </Card>
@@ -336,7 +344,7 @@ const CreateRoute = () => {
                   color="secondary"
                   variant="contained"
                 >
-                  Create route
+                  Добавить маршрут
                 </Button>
                 <Typography color="error">{errorText}</Typography>
               </Stack>
@@ -346,7 +354,7 @@ const CreateRoute = () => {
         <Grid item xs={5}>
           <Card sx={{ height: "100vh" }}>
             <CardContent sx={{ overflow: "scroll" }}>
-              <Typography>Selected categories:</Typography>
+              <Typography>Выбранные категории:</Typography>
               <Stack direction="row" spacing={2}>
                 {categoriesToDisplay.map((category, i) => (
                   <Chip
@@ -358,7 +366,7 @@ const CreateRoute = () => {
                 ))}
               </Stack>
               <Divider light />
-              <Typography>Selected points:</Typography>
+              <Typography>Выбранные точки:</Typography>
               {pointsToDisplay !== undefined
                 ? pointsToDisplay.map((point, i) => (
                     <ListItem key={i}>
@@ -381,7 +389,7 @@ const CreateRoute = () => {
                             variant="contained"
                             onClick={(e) => removePoint(point)}
                           >
-                            Remove
+                            Удалить
                           </Button>
                         </CardContent>
                       </Card>
@@ -389,7 +397,7 @@ const CreateRoute = () => {
                   ))
                 : ""}
               <Divider light />
-              <Typography>Uploaded images:</Typography>
+              <Typography>Загруженные фото:</Typography>
               <ImageList
                 sx={{ width: 500, height: 450 }}
                 cols={2}
@@ -406,7 +414,7 @@ const CreateRoute = () => {
                           variant="contained"
                           onClick={(e) => removeImage(item)}
                         >
-                          Remove
+                          Удалить
                         </Button>
                       </ImageListItem>
                     ))

@@ -43,7 +43,7 @@ const Points = () => {
     try {
       const response = await deleteAuthRequest(`/point/${id}`);
       if (response) {
-        setMessage("Point deleted");
+        setMessage("Точка удалена");
         setOpenSuccess(true);
         const data = await getAuthRequest("/point");
         setPointData(data);
@@ -92,7 +92,7 @@ const Points = () => {
         return (
           <Link to={`/points/edit/${params.row.id}`}>
             <Button variant="contained" color="warning">
-              Edit
+              Изменить
             </Button>
           </Link>
         );
@@ -108,7 +108,7 @@ const Points = () => {
             color="error"
             onClick={(e) => handleDelete(params.id)}
           >
-            Delete
+            Удалить
           </Button>
         );
       },
@@ -123,11 +123,11 @@ const Points = () => {
         handleClose={handleClose}
         message={message}
       />
-      <TableHeader title="POINTS" subtitle="Manage points" />
+      <TableHeader title="Точки" subtitle="Управление точками" />
       <Box sx={{ display: "flex", flexDirection: "row-reverse", m: 1 }}>
         <Link to="/points/create">
           <Button variant="contained" color="secondary">
-            Create
+            Добавить
           </Button>
         </Link>
       </Box>

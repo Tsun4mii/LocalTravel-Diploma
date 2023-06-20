@@ -6,7 +6,7 @@ const AcceptorPanel = ({ selected, setSelected }) => {
   return (
     <>
       <Item
-        title="Invites"
+        title="Приглашения"
         to="/invites"
         icon={<ContactMailIcon />}
         selected={selected}

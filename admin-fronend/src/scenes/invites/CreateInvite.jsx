@@ -28,7 +28,7 @@ const CreateInvite = () => {
       });
       const response = await postAuthRequest("/invite/create", emailToSend);
       if (response.id) {
-        setMessage("Invite sended for approval");
+        setMessage("Приглашение отправлено на проверку");
         setOpenSuccess(true);
       }
     } catch (error) {
@@ -46,13 +46,13 @@ const CreateInvite = () => {
         message={message}
       />
       <TableHeader
-        title="Invites"
-        subtitle="Create new invites. You sending your invite for approval to another admin."
+        title="Приглашения"
+        subtitle="Создайте новое приглашение. Вы отправите данное пришлашение на проверку другому администратору."
       />
       <Box m="40px 0 0 0" alignContent="center" display="flex">
         <TextField
           id="outlined-required"
-          label="Point name"
+          label="Почта получателя"
           value={email}
           color="secondary"
           type="email"
@@ -60,6 +60,7 @@ const CreateInvite = () => {
         />
 
         <Button
+          sx={{ marginTop: 2 }}
           color="secondary"
           variant="contained"
           style={{ margin: "10px" }}
@@ -67,7 +68,7 @@ const CreateInvite = () => {
             handleSend();
           }}
         >
-          Send
+          Отправить
         </Button>
       </Box>
     </Box>

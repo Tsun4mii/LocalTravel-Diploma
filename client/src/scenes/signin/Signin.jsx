@@ -22,6 +22,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { setAuthCookies } from "../../utils/helpers/cookies.helpers";
 import { useTranslation } from "react-i18next";
+import NotificationSnackBar from "../../components/Notification/NotificationSnackBar";
+import { loginSchema } from "../../utils/validation/login.validation.schema";
 
 const Signin = () => {
   const { t } = useTranslation();
@@ -32,28 +34,56 @@ const Signin = () => {
   const reduxDispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [message, setMessage] = useState("");
+
   const handleSignin = async (e) => {
-    e.preventDefault();
-    const tokens = await postRequest("/auth/local/signin", {
-      email: email,
-      password: password,
-    });
-    setAuthCookies(tokens);
-    const userData = await getAuthRequest("/auth/me");
-    console.log(userData);
-    reduxDispatch(
-      setUserData({
-        id: userData.id,
-        email: userData.email,
-        role: userData.role,
-      })
-    );
-    return navigate("/");
+    try {
+      e.preventDefault();
+      const user = await loginSchema.validate({
+        email: email,
+        password: password,
+      });
+      const tokens = await postRequest("/auth/local/signin", user);
+      if (tokens.statusCode === 403) {
+        throw new Error("Wrong email or password");
+      }
+      setAuthCookies(tokens);
+      const userData = await getAuthRequest("/auth/me");
+      console.log(userData);
+      reduxDispatch(
+        setUserData({
+          id: userData.id,
+          email: userData.email,
+          role: userData.role,
+        })
+      );
+      return navigate("/");
+    } catch (error) {
+      setMessage(error.message);
+      setOpenError(true);
+    }
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+    setOpenSuccess(false);
+    setMessage("");
   };
 
   return (
     <>
       <Grid container component="main" sx={{ height: "100vh" }}>
+        <NotificationSnackBar
+          openError={openError}
+          openSuccess={openSuccess}
+          handleClose={handleClose}
+          message={message}
+        />
         <Grid
           item
           xs={false}

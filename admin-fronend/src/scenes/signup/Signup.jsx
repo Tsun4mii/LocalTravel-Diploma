@@ -5,6 +5,8 @@ import {
   Typography,
   TextField,
   Button,
+  List,
+  ListItem,
 } from "@mui/material";
 import React, { useState } from "react";
 import { useTheme } from "@mui/material";
@@ -53,6 +55,9 @@ const Signup = () => {
         code: code,
       });
       const tokens = await postRequest("/admin/auth/local/signup", admin);
+      if (tokens.statusCode === 403) {
+        throw new Error("Неверный код или адрес электронной почты");
+      }
       setAuthCookies(tokens);
       const userData = await getAuthRequest("/admin/auth/me");
       console.log(userData);
@@ -125,7 +130,7 @@ const Signup = () => {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Почта"
                 name="email"
                 autoComplete="email"
                 color="secondary"
@@ -136,19 +141,44 @@ const Signup = () => {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="Пароль"
                 type="password"
                 id="password"
                 autoComplete="current-password"
                 color="secondary"
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <Typography> Требования к паролю:</Typography>
+              <List
+                sx={{
+                  listStyleType: "disc",
+                  pl: 2,
+                  marginLeft: 3,
+                  "& .MuiListItem-root": {
+                    display: "list-item",
+                  },
+                }}
+              >
+                <ListItem sx={{ margin: 0, padding: 0 }}>
+                  <Typography>Длина от 8 до 15</Typography>
+                </ListItem>
+                <ListItem sx={{ margin: 0, padding: 0 }}>
+                  <Typography>
+                    Минимум 1 символ в врехнем регистре и 1 в нижнем
+                  </Typography>
+                </ListItem>
+                <ListItem sx={{ margin: 0, padding: 0 }}>
+                  <Typography>
+                    Минимум 1 цифра и 1 специальный символ (\d@$!%*?&_)
+                  </Typography>
+                </ListItem>
+              </List>
               <TextField
                 margin="normal"
                 required
                 fullWidth
                 name="code"
-                label="code"
+                label="Код"
                 type="password"
                 id="code"
                 color="secondary"
@@ -161,7 +191,9 @@ const Signup = () => {
                 color="secondary"
                 sx={{ mt: 3, mb: 2, bgcolor: colors.greenAccent[500] }}
               >
-                <Typography color={colors.primary[500]}>Sign Up</Typography>
+                <Typography color={colors.primary[500]}>
+                  Зарегистрироваться
+                </Typography>
               </Button>
             </Box>
           </Box>

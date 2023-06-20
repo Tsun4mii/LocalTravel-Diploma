@@ -2,6 +2,7 @@ import { Box, Button, Grid, Typography } from "@mui/material";
 import { Card } from "@nextui-org/react";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const { t } = useTranslation();
@@ -36,27 +37,31 @@ const Index = () => {
           >
             {t("We will help")}
           </Typography>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#5dcb67",
-              position: "absolute",
-              top: 615,
-              left: 250,
-            }}
-          >
-            <Typography fontFamily={"Russo One"}>{t("Sign up")}</Typography>
-          </Button>
-          <Button
-            variant="text"
-            sx={{
-              position: "absolute",
-              top: 615,
-              left: 400,
-            }}
-          >
-            <Typography fontFamily={"Russo One"}>{t("Sign in")}</Typography>
-          </Button>
+          <Link to="/signup">
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#5dcb67",
+                position: "absolute",
+                top: 615,
+                left: 250,
+              }}
+            >
+              <Typography fontFamily={"Russo One"}>{t("Sign up")}</Typography>
+            </Button>
+          </Link>
+          <Link to="/signin">
+            <Button
+              variant="text"
+              sx={{
+                position: "absolute",
+                top: 615,
+                left: 400,
+              }}
+            >
+              <Typography fontFamily={"Russo One"}>{t("Sign in")}</Typography>
+            </Button>
+          </Link>
         </Grid>
         <Grid item sm={6}>
           <Card

@@ -9,28 +9,28 @@ const AdminPanel = ({ selected, setSelected }) => {
   return (
     <>
       <Item
-        title="Points"
+        title="Точки"
         to="/points"
         icon={<AddLocationIcon />}
         selected={selected}
         setSelected={setSelected}
       />
       <Item
-        title="Routes"
+        title="Маршруты"
         to="/routes"
         icon={<RouteIcon />}
         selected={selected}
         setSelected={setSelected}
       />
       <Item
-        title="Categories"
+        title="Категории"
         to="/categories"
         icon={<CategoryIcon />}
         selected={selected}
         setSelected={setSelected}
       />
       <Item
-        title="Countries"
+        title="Страны"
         to="/countries"
         icon={<PublicIcon />}
         selected={selected}

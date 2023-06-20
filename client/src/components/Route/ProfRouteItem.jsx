@@ -22,7 +22,7 @@ const ProfRouteItem = ({ name, short_description, id }) => {
             }
           />
           <Link to={`/route/${id}`}>
-            <Button color="secondary">More</Button>
+            <Button color="secondary">Подробнее</Button>
           </Link>
         </Card.Body>
       </Card>

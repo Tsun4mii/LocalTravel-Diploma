@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { tokens } from "../../utils/theme";
-import { Box, useTheme, TextField, Button, Stack } from "@mui/material";
+import {
+  Box,
+  useTheme,
+  TextField,
+  Button,
+  Stack,
+  Typography,
+} from "@mui/material";
 import TableHeader from "../../components/data/TableHeader";
 import { postAuthRequest } from "../../utils/helpers/requests.helpers";
 import { categorySchema } from "../../utils/schemas/category.schema";
@@ -32,7 +39,7 @@ const CreateCategory = () => {
       });
       const response = await postAuthRequest("/category", category);
       if (response) {
-        setMessage("Category created");
+        setMessage("Категория добавлена");
         setOpenSuccess(true);
       }
     } catch (error) {
@@ -49,7 +56,7 @@ const CreateCategory = () => {
         handleClose={handleClose}
         message={message}
       />
-      <TableHeader title="Point" subtitle="Edit point" />
+      <TableHeader title="Категории" subtitle="Добавление категории" />
       <Box m="40px 0 0 0" alignContent="center" display="flex">
         <Stack
           direction={{ xs: "column", sm: "row" }}
@@ -57,7 +64,7 @@ const CreateCategory = () => {
         >
           <TextField
             id="outlined-required"
-            label="Category name"
+            label="Наименование категории"
             value={name}
             color="secondary"
             onChange={(e) => setName(e.target.value)}
@@ -69,9 +76,10 @@ const CreateCategory = () => {
         type="submit"
         variant="contained"
         color="secondary"
+        sx={{ marginTop: 2 }}
         onClick={(e) => handleCreate()}
       >
-        Create
+        Добавить
       </Button>
     </Box>
   );

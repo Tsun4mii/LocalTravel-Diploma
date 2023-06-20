@@ -60,7 +60,7 @@ const EditCategory = () => {
       });
       const response = await patchAuthRequest(`/category/${id}`, category);
       if (response) {
-        setMessage("Category created");
+        setMessage("Категория изменена");
         setOpenSuccess(true);
       }
     } catch (error) {
@@ -77,7 +77,7 @@ const EditCategory = () => {
         handleClose={handleClose}
         message={message}
       />
-      <TableHeader title="Point" subtitle="Edit point" />
+      <TableHeader title="Категории" subtitle="Изменить категорию" />
       <Box m="40px 0 0 0" alignContent="center" display="flex">
         <Stack
           direction={{ xs: "column", sm: "row" }}
@@ -85,7 +85,7 @@ const EditCategory = () => {
         >
           <TextField
             id="outlined-required"
-            label="Point name"
+            label="Наименование категории"
             value={name}
             color="secondary"
             onChange={(e) => setName(e.target.value)}
@@ -99,12 +99,13 @@ const EditCategory = () => {
         alignItems="center"
       >
         <Button
+          sx={{ marginTop: 2 }}
           type="submit"
           variant="contained"
           color="secondary"
           onClick={handleUpdate}
         >
-          Save
+          Сохранить
         </Button>
       </Stack>
     </Box>

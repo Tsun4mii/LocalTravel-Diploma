@@ -32,7 +32,7 @@ const CreateCountry = () => {
       });
       const response = await postAuthRequest("/country", country);
       if (response) {
-        setMessage("Country crated");
+        setMessage("Страна добавлена");
         return setOpenSuccess(true);
       }
     } catch (error) {
@@ -49,7 +49,7 @@ const CreateCountry = () => {
         handleClose={handleClose}
         message={message}
       />
-      <TableHeader title="Point" subtitle="Edit point" />
+      <TableHeader title="Страны" subtitle="Добавьте страну" />
       <Box m="40px 0 0 0" alignContent="center" display="flex">
         <Stack
           direction={{ xs: "column", sm: "row" }}
@@ -57,7 +57,7 @@ const CreateCountry = () => {
         >
           <TextField
             id="outlined-required"
-            label="Country name"
+            label="Название"
             value={name}
             color="secondary"
             onChange={(e) => setName(e.target.value)}
@@ -71,7 +71,7 @@ const CreateCountry = () => {
         color="secondary"
         onClick={(e) => handleCreate()}
       >
-        Create
+        Сохранить
       </Button>
     </Box>
   );

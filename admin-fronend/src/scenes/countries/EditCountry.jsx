@@ -77,7 +77,7 @@ const EditCountry = () => {
         handleClose={handleClose}
         message={message}
       />
-      <TableHeader title="Point" subtitle="Edit point" />
+      <TableHeader title="Страны" subtitle="Измените страну" />
       <Box m="40px 0 0 0" alignContent="center" display="flex">
         <Stack
           direction={{ xs: "column", sm: "row" }}
@@ -85,7 +85,7 @@ const EditCountry = () => {
         >
           <TextField
             id="outlined-required"
-            label="Point name"
+            label="Название"
             value={name}
             color="secondary"
             onChange={(e) => setName(e.target.value)}
@@ -104,7 +104,7 @@ const EditCountry = () => {
           color="secondary"
           onClick={handleUpdate}
         >
-          Save
+          Сохранить
         </Button>
       </Stack>
     </Box>

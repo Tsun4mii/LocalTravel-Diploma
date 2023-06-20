@@ -44,7 +44,7 @@ const CommentSend = ({
         color="secondary"
         onClick={(e) => handleSend()}
       >
-        Comment
+        Комментировать
       </Button>
     </Stack>
   );

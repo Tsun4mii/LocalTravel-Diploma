@@ -58,6 +58,15 @@ const resources = {
       "Min 10 chars": "Minimum 10 characters",
       "Min 30 chars": "Minimum 30 characters",
       "Min 50 chars": "Minimum 50 characters",
+
+      passReq: "Password requirements",
+
+      AddLandmark: "Add landmark",
+      Sub: "Subscription",
+      CSub: "Cancel subscription",
+      reqOne: "Length from 8 to 15",
+      reqTwo: "At least 1 character in upper case and 1 in lower case",
+      reqThree: "Minimum 1 digit and 1 special character (d@$!%*?&_)",
     },
   },
   ru: {
@@ -115,6 +124,15 @@ const resources = {
       "Min 10 chars": "Минимум 10 символов",
       "Min 30 chars": "Минимум 30 символов",
       "Min 50 chars": "Минимум 50 символов",
+
+      AddLandmark: "Добавить достопримечательость",
+      Sub: "Подписка",
+      CSub: "Отменить подписку",
+
+      passReq: "Требования к паролю",
+      reqOne: "Длина от 8 до 15",
+      reqTwo: "Минимум 1 символ в врехнем регистре и 1 в нижнем",
+      reqThree: "Минимум 1 цифра и 1 специальный символ (d@$!%*?&_)",
     },
   },
 };

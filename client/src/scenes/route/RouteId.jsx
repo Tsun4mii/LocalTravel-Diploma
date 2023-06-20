@@ -224,7 +224,7 @@ const RouteId = () => {
             </Typography>
             <Typography
               fontSize={40}
-              fontFamily={"Archivo Black"}
+              fontFamily={"Russo One"}
               color={colors.chateau_green[500]}
               paddingBottom={4}
             >
@@ -320,11 +320,11 @@ const RouteId = () => {
                   ))}
                 </>
               ) : (
-                <Typography>There nothing yet</Typography>
+                <Typography>Будьте первым, кто оставит комментарий!</Typography>
               )}
             </List>
           </TabPanel>
-          <TabPanel>
+          <TabPanel value={tabValue} index={3}>
             <List>
               {routeData.points !== undefined
                 ? routeData.points.map((point, i) => (

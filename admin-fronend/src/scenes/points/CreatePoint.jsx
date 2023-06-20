@@ -40,7 +40,7 @@ const CreatePoint = () => {
       });
       const response = await postAuthRequest("/point", point);
       if (response) {
-        setMessage("Point crated");
+        setMessage("Точка добавлена");
         return setOpenSuccess(true);
       }
     } catch (error) {
@@ -57,7 +57,7 @@ const CreatePoint = () => {
         handleClose={handleClose}
         message={message}
       />
-      <TableHeader title="Point" subtitle="Edit point" />
+      <TableHeader title="Точки" subtitle="Добавить точку" />
       <Box m="40px 0 0 0" alignContent="center" display="flex">
         <Stack
           direction={{ xs: "column", sm: "row" }}
@@ -65,7 +65,7 @@ const CreatePoint = () => {
         >
           <TextField
             id="outlined-required"
-            label="Point name"
+            label="Наименование точки"
             value={name}
             color="secondary"
             onChange={(e) => setName(e.target.value)}
@@ -73,7 +73,7 @@ const CreatePoint = () => {
           />
           <TextField
             id="outlined-required"
-            label="Point latitude"
+            label="Широта"
             value={lat}
             color="secondary"
             onChange={(e) => setLat(e.target.value)}
@@ -81,7 +81,7 @@ const CreatePoint = () => {
           />
           <TextField
             id="outlined-required"
-            label="Point longitude"
+            label="Долгота"
             value={lon}
             color="secondary"
             onChange={(e) => setLon(e.target.value)}
@@ -89,7 +89,7 @@ const CreatePoint = () => {
           />
           <TextField
             id="outlined-required"
-            label="Point address"
+            label="Адрес"
             value={address}
             color="secondary"
             onChange={(e) => setAddress(e.target.value)}
@@ -97,7 +97,7 @@ const CreatePoint = () => {
           />
           <TextField
             id="outlined-required"
-            label="Point country Id"
+            label="ID страны"
             value={countryId}
             color="secondary"
             onChange={(e) => setCountryId(e.target.value)}
@@ -112,7 +112,7 @@ const CreatePoint = () => {
         color="secondary"
         onClick={(e) => handleCreate()}
       >
-        Create
+        Добавить
       </Button>
     </Box>
   );

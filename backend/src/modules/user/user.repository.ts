@@ -3,7 +3,7 @@ import { AuthDto, RegisterDTO } from '../auth/dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserAuthHelpers } from 'src/common/helpers';
-import { Prisma } from '@prisma/client';
+import { Prisma, ROLE } from '@prisma/client';
 
 @Injectable()
 export class UserRepository {
@@ -25,12 +25,13 @@ export class UserRepository {
     });
   }
 
-  async createUser(user: RegisterDTO, hash: string) {
+  async createUser(user: RegisterDTO, hash: string, stripeId: string) {
     const newUser = await this.prisma.user.create({
       data: {
         email: user.email,
         password: hash,
         username: user.username,
+        stripeId: stripeId,
       },
     });
     return newUser;
@@ -82,5 +83,14 @@ export class UserRepository {
 
   async update(userId: string, data: Prisma.UserUpdateInput) {
     return await this.prisma.user.update({ where: { id: userId }, data: data });
+  }
+
+  async updateRole(userId: string, role: ROLE) {
+    return await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        role: role,
+      },
+    });
   }
 }

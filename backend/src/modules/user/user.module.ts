@@ -6,10 +6,17 @@ import { JwtModule } from '@nestjs/jwt';
 import { UserAuthHelpers } from 'src/common/helpers';
 import { UserMapper } from './mapper/user.mapper';
 import { UserController } from './user.controller';
+import { SubscriptionService } from '../subscription/subscription.service';
 
 @Module({
   imports: [PrismaModule, JwtModule.register({})],
-  providers: [UserService, UserRepository, UserAuthHelpers, UserMapper],
+  providers: [
+    UserService,
+    UserRepository,
+    UserAuthHelpers,
+    UserMapper,
+    SubscriptionService,
+  ],
   exports: [UserService, UserRepository],
   controllers: [UserController],
 })

@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Outlet, Link } from "react-router-dom";
+import { NavLink, Outlet, Link, useNavigate } from "react-router-dom";
 import { Navbar, Text } from "@nextui-org/react";
 import { useSelector } from "react-redux";
 import { Button, IconButton, Typography } from "@mui/material";
@@ -7,11 +7,21 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SettingsButton from "../../components/settings/SettingsButton";
 import LogoutButton from "../../components/LogoutButton";
 import { useTranslation } from "react-i18next";
+import {
+  getAuthRequest,
+  postAuthRequest,
+} from "../../utils/helpers/request.helpers";
 
 const Root = () => {
   const { t } = useTranslation();
   const isAuth = useSelector((state) => state.user.isAuth);
   const role = useSelector((state) => state.user.role);
+  const navigate = useNavigate();
+
+  const onSub = async () => {
+    const response = await postAuthRequest("/user/subscribe");
+    return window.location.replace(response.url);
+  };
 
   return (
     <>
@@ -30,7 +40,7 @@ const Root = () => {
         </Navbar.Content>
         {isAuth === true ? (
           <>
-            {role === "USER" ? (
+            {role === "PREMIUM" ? (
               <>
                 <Link to="/route/create">
                   <Button variant="contained" color="secondary">
@@ -44,6 +54,32 @@ const Root = () => {
               <></>
             )}
             <Navbar.Content>
+              {role === "USER" ? (
+                <>
+                  <Navbar.Item>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={onSub}
+                    >
+                      <Typography fontFamily={["Archivo Black", "Russo One"]}>
+                        {t("Sub")}
+                      </Typography>
+                    </Button>
+                  </Navbar.Item>
+                </>
+              ) : (
+                <></>
+              )}
+              <Navbar.Item>
+                <Link to="/point/create">
+                  <Button variant="contained" color="secondary">
+                    <Typography fontFamily={["Archivo Black", "Russo One"]}>
+                      {t("AddLandmark")}
+                    </Typography>
+                  </Button>
+                </Link>
+              </Navbar.Item>
               <Navbar.Item>
                 <Link to="/profile">
                   <IconButton color="secondary">

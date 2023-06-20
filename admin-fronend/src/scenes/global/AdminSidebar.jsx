@@ -119,7 +119,7 @@ const AdminSidebar = () => {
 
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item
-              title="Dashboard"
+              title="Главная"
               to="/"
               icon={<HomeOutlinedIcon />}
               selected={selected}
@@ -137,7 +137,7 @@ const AdminSidebar = () => {
           </Box>
           <Box sx={{ m: 2 }} textAlign="center">
             <Button variant="contained" color="secondary" onClick={logout}>
-              <Typography color={colors.primary[500]}>Logout</Typography>
+              <Typography color={colors.primary[500]}>Выйти</Typography>
             </Button>
           </Box>
         </Menu>

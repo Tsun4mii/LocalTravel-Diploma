@@ -149,7 +149,7 @@ const PublicProfile = () => {
                   aria-label="basic tabs example"
                   textColor="secondary"
                 >
-                  <Tab label={t("Following")} {...a11yProps(0)} />
+                  <Tab label={t("Followers")} {...a11yProps(0)} />
                   <Tab label={t("Following")} {...a11yProps(1)} />
                 </Tabs>
               </Box>

@@ -39,9 +39,11 @@ const Invites = () => {
       const response = await postAuthRequest("/invite/accept", {
         inviteId: id,
       });
-      return console.log(response);
+      const data = await getAuthRequest("/invite");
+      return setInviteData(data);
     } catch (error) {
-      return console.log(error);
+      setMessage(error.message);
+      setOpenError(true);
     }
   };
 
@@ -49,7 +51,7 @@ const Invites = () => {
     try {
       const response = await deleteAuthRequest(`/invite/${id}`);
       if (response) {
-        setMessage("Invite deleted");
+        setMessage("Приглашение удалено");
         setOpenSuccess(true);
         const data = await getAuthRequest("/invite");
         setInviteData(data);
@@ -96,7 +98,7 @@ const Invites = () => {
             color="secondary"
             onClick={(e) => handleApprove(params.id)}
           >
-            Approve
+            Подтвердить
           </Button>
         );
       },
@@ -111,7 +113,7 @@ const Invites = () => {
             color="error"
             onClick={(e) => handleDelete(params.id)}
           >
-            Deny
+            Отменить
           </Button>
         );
       },

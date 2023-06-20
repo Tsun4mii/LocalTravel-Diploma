@@ -42,7 +42,7 @@ const Routes = () => {
     try {
       const response = await deleteAuthRequest(`/route/${id}`);
       if (response) {
-        setMessage("Route deleted");
+        setMessage("Маршрут удален");
         setOpenSuccess(true);
         const data = await getAuthRequest("/route");
         setRouteData(data);
@@ -94,7 +94,7 @@ const Routes = () => {
             color="error"
             onClick={(e) => handleDelete(params.id)}
           >
-            Delete
+            Удалить
           </Button>
         );
       },
@@ -109,11 +109,14 @@ const Routes = () => {
         handleClose={handleClose}
         message={message}
       />
-      <TableHeader title="POINTS" subtitle="Manage points" />
+      <TableHeader
+        title="Туристические маршруты"
+        subtitle="Управление маршрутами"
+      />
       <Box sx={{ display: "flex", flexDirection: "row-reverse", m: 1 }}>
         <Link to="/routes/create">
           <Button variant="contained" color="secondary">
-            Create
+            Добавить
           </Button>
         </Link>
       </Box>

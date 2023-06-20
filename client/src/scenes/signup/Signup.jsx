@@ -6,6 +6,10 @@ import {
   TextField,
   Link,
   Button,
+  InputAdornment,
+  IconButton,
+  List,
+  ListItem,
 } from "@mui/material";
 import React from "react";
 import { useTheme } from "@mui/material";
@@ -22,6 +26,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { setAuthCookies } from "../../utils/helpers/cookies.helpers";
 import { useTranslation } from "react-i18next";
+import { registerSchema } from "../../utils/validation/register.validatiom.schema";
+import NotificationSnackBar from "../../components/Notification/NotificationSnackBar";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const Signup = () => {
   const { t } = useTranslation();
@@ -33,30 +41,60 @@ const Signup = () => {
   const reduxDispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [message, setMessage] = useState("");
+
   const handleSignup = async (e) => {
-    e.preventDefault();
-    const tokens = await postRequest("/auth/local/signup", {
-      email: email,
-      password: password,
-      username: username,
-    });
-    setAuthCookies(tokens);
-    const userData = await getAuthRequest("/auth/me");
-    console.log(userData);
-    reduxDispatch(
-      setUserData({
-        id: userData.id,
-        email: userData.email,
-        role: userData.role,
-        username: userData.username,
-      })
-    );
-    return navigate("/");
+    try {
+      e.preventDefault();
+
+      const user = await registerSchema.validate({
+        email: email,
+        password: password,
+        username: username,
+      });
+
+      const tokens = await postRequest("/auth/local/signup", user);
+      if (tokens.statusCode === 500) {
+        throw new Error("Email already in use");
+      }
+      setAuthCookies(tokens);
+      const userData = await getAuthRequest("/auth/me");
+      console.log(userData);
+      reduxDispatch(
+        setUserData({
+          id: userData.id,
+          email: userData.email,
+          role: userData.role,
+          username: userData.username,
+        })
+      );
+      return navigate("/");
+    } catch (error) {
+      setMessage(error.message);
+      setOpenError(true);
+    }
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+    setOpenSuccess(false);
+    setMessage("");
   };
 
   return (
     <>
       <Grid container component="main" sx={{ height: "100vh" }}>
+        <NotificationSnackBar
+          openError={openError}
+          openSuccess={openSuccess}
+          handleClose={handleClose}
+          message={message}
+        />
         <Grid
           item
           xs={false}
@@ -134,6 +172,33 @@ const Signup = () => {
                 color="secondary"
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <Typography fontFamily={"Russo One"}>{t("passReq")}</Typography>
+              <List
+                sx={{
+                  listStyleType: "disc",
+                  pl: 2,
+                  marginLeft: 3,
+                  "& .MuiListItem-root": {
+                    display: "list-item",
+                  },
+                }}
+              >
+                <ListItem sx={{ margin: 0, padding: 0 }}>
+                  <Typography fontFamily={"Russo One"}>
+                    {t("reqOne")}
+                  </Typography>
+                </ListItem>
+                <ListItem sx={{ margin: 0, padding: 0 }}>
+                  <Typography fontFamily={"Russo One"}>
+                    {t("reqTwo")}
+                  </Typography>
+                </ListItem>
+                <ListItem sx={{ margin: 0, padding: 0 }}>
+                  <Typography fontFamily={"Russo One"}>
+                    {t("reqThree")}
+                  </Typography>
+                </ListItem>
+              </List>
               <Button
                 type="submit"
                 fullWidth

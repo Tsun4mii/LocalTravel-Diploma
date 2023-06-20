@@ -70,7 +70,7 @@ const Countries = () => {
         return (
           <Link to={`/countries/edit/${params.row.id}`}>
             <Button variant="contained" color="warning">
-              Edit
+              Изменить
             </Button>
           </Link>
         );
@@ -86,7 +86,7 @@ const Countries = () => {
             color="error"
             onClick={(e) => handleDelete(params.id)}
           >
-            Delete
+            Удалить
           </Button>
         );
       },
@@ -101,11 +101,11 @@ const Countries = () => {
         handleClose={handleClose}
         message={message}
       />
-      <TableHeader title="Countries" subtitle="Manage countries" />
+      <TableHeader title="Страны" subtitle="Управляйте странами" />
       <Box sx={{ display: "flex", flexDirection: "row-reverse", m: 1 }}>
         <Link to="/countries/create">
           <Button variant="contained" color="secondary">
-            Create
+            Добавить
           </Button>
         </Link>
       </Box>

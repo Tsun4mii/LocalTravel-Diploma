@@ -14,6 +14,7 @@ import { CountryModule } from './modules/country/country.module';
 import { CategoryModule } from './modules/category/category.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { FollowModule } from './modules/follow/follow.module';
+import { SubscriptionModule } from './modules/subscription/subscription.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { FollowModule } from './modules/follow/follow.module';
     CategoryModule,
     CommentModule,
     FollowModule,
+    SubscriptionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
